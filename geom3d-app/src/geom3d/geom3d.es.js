@@ -17829,9 +17829,9 @@ class qm extends nu {
     });
   }
   remove(n) {
-    if (Ce.scene.remove(n), this.pointclouds.indexOf(n) > -1) {
+    if (Ce.scene.scenePointCloud.remove(n), this.pointclouds.indexOf(n) > -1) {
       let r = this.pointclouds.indexOf(n);
-      this.pointclouds.splice(r, 1), this.urlsl.splice(r, 1);
+      this.pointclouds.splice(r, 1), this.urls.splice(r, 1);
     }
   }
   updateVisibility() {

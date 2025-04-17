@@ -5,7 +5,6 @@ import { useScripts } from './misc/useScript.js'
 import { initialize, setView, PointcloudLayer, GeometryLayer, Line, Polygon, Point, View, Draw, Snap, Modify, OverlayLayer, Overlay, GLTFLayer } from './geom3d/geom3d.es.js';
 import { useEffect, useState } from 'react';
 import Sidebar from './ui/Sidebar.jsx';
-import { Grid } from '@mui/material';
 
 function App() {
   const [scriptsLoaded, setScriptsLoaded] = useState(false);
@@ -35,14 +34,7 @@ function App() {
       })
 
       let view = new View({
-        layers: [
-          new GeometryLayer({
-            name: "Layer name",
-            geometries: [
-              new Line([[0, 0, 0], [10, 10, 10]])
-            ]
-          })
-        ]
+        layers: []
       });
 
       setView(view);
