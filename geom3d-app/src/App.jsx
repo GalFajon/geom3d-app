@@ -5,6 +5,8 @@ import { useScripts } from './misc/useScript.js'
 import { initialize, setView, PointcloudLayer, GeometryLayer, Line, Polygon, Point, View, Draw, Snap, Modify, OverlayLayer, Overlay, GLTFLayer } from './geom3d/geom3d.es.js';
 import { useEffect, useState } from 'react';
 import Sidebar from './ui/Sidebar.jsx';
+import { AppBar, Toolbar, Button, Grid } from '@mui/material';
+import Nav from './ui/Nav.jsx';
 
 function App() {
   const [scriptsLoaded, setScriptsLoaded] = useState(false);
@@ -47,13 +49,14 @@ function App() {
 
   return (
     <>
-      <div style={{ width: '25%' }}>
-        <Sidebar geom3dView={geom3dView} />
-      </div>
-      <div className="potree_container">
-        <div style={{ marginLeft: '25%', width: '75%', height: '100%' }} id="potree_render_area"></div>
-        <div id="potree_sidebar_container"></div>
-      </div>
+      <Grid container>
+        <Nav geom3dView={geom3dView} />
+        <Sidebar sx={{ zIndex: 2147483647 }} geom3dView={geom3dView} />
+        <div className="potree_container">
+          <div id="potree_render_area"></div>
+          <div id="potree_sidebar_container"></div>
+        </div>
+      </Grid>
     </>
   )
 }
