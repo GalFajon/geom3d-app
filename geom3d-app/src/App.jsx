@@ -2,13 +2,15 @@
 "use client"
 
 import { useScripts } from './misc/useScript.js'
-import { initialize, setView, PointcloudLayer, GeometryLayer, Line, Polygon, Point, View, Draw, Snap, Modify, OverlayLayer, Overlay, GLTFLayer } from './geom3d/geom3d.es.js';
 import { useEffect, useState } from 'react';
 import Sidebar from './ui/Sidebar.jsx';
 import { AppBar, Toolbar, Button, Grid } from '@mui/material';
 import Nav from './ui/Nav.jsx';
+import { getView, initializeGeom3D } from './geom3d/geom3dWrapper.js';
+import { SelectedLayerContext } from './ContextWrapper.js';
 
 function App() {
+  const [selectedLayer, setSelectedLayer] = useState(null);
   const [scriptsLoaded, setScriptsLoaded] = useState(false);
   const [geom3dView, setGeom3dView] = useState(null);
 
@@ -29,19 +31,8 @@ function App() {
 
   useEffect(() => {
     async function main() {
-      await initialize({
-        viewer: {
-          background: 'skybox'
-        }
-      })
-
-      let view = new View({
-        layers: []
-      });
-
-      setView(view);
+      let view = await initializeGeom3D();
       setGeom3dView(view);
-      view.center();
     }
 
     if (scriptsLoaded) main();
@@ -49,14 +40,22 @@ function App() {
 
   return (
     <>
+      <SelectedLayerContext.Provider value={{ selectedLayer: selectedLayer, setSelectedLayer: setSelectedLayer }}>
       <Grid container>
-        <Nav geom3dView={geom3dView} />
-        <Sidebar sx={{ zIndex: 2147483647 }} geom3dView={geom3dView} />
+        { 
+          geom3dView ? 
+            <>
+              <Nav/>
+              <Sidebar sx={{ zIndex: 2147483647 }}/>
+            </>
+            : <></>
+        }
         <div className="potree_container">
           <div id="potree_render_area"></div>
           <div id="potree_sidebar_container"></div>
         </div>
       </Grid>
+      </SelectedLayerContext.Provider>
     </>
   )
 }

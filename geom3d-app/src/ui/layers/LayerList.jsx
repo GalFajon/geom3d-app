@@ -5,24 +5,26 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import TerrainIcon from '@mui/icons-material/Terrain';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-
+import AdsClickIcon from '@mui/icons-material/AdsClick';
 import ArchitectureIcon from '@mui/icons-material/Architecture';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import LayerAddModal from './LayerAddModal';
+import { getView } from '../../geom3d/geom3dWrapper';
+import { SelectedLayerContext } from '../../ContextWrapper';
+import { clearCurrentInteraction, isSnapping, toggleSnap } from '../../interactions/interactionWrapper';
 
 export default function LayerList(props) {
     const [layerMarkup, setLayerMarkup] = useState([]);
     const [layersComp, setLayersComp] = useState(true);
     const [layerType, setLayerType] = useState('GeometryLayer');
-    const [selectedGeometryLayer, setSelectedGeometryLayer] = useState(null);
+    const layerContext = useContext(SelectedLayerContext);
 
-    let layers = props.geom3dView.layers;
+    let layers = getView().layers;
+    layers.sort((a, b) => b.type == 'GeometryLayer');
 
     useEffect(() => {
         let layerMarkupG = [];
         let i = 0;
-
-        console.log(selectedGeometryLayer);
 
         for (let layer of layers) {
             let icon = <ShapeLine />;
@@ -34,20 +36,33 @@ export default function LayerList(props) {
                 <ListItemButton
                     key={i}
                     selected={
-                        (selectedGeometryLayer != null && selectedGeometryLayer == layers.indexOf(layer))
+                        (layerContext.selectedLayer != null && layerContext.selectedLayer == layer)
                     }
-                    onClick={() => { if (layer.type == 'GeometryLayer') setSelectedGeometryLayer(layers.indexOf(layer)); }}
+                    onClick={() => { 
+                            if (layer.type == 'GeometryLayer') layerContext.setSelectedLayer(layer); 
+
+                        }
+                    }
                 >
                     <ListItem
                         secondaryAction={
                             <>
                                 <Stack spacing={2} direction="row">
+                                    <IconButton edge="end" onClick={() => { toggleSnap(layer); setLayersComp(!layersComp); }}>
+                                        {
+                                            isSnapping(layer) ? <AdsClickIcon /> : <AdsClickIcon color='disabled' />
+                                        }
+                                    </IconButton>
                                     <IconButton edge="end" onClick={() => { if (layer.visible) layer.hide(); else layer.show(); setLayersComp(!layersComp); }}>
                                         {
                                             layer.visible ? <VisibilityIcon /> : <VisibilityOffIcon />
                                         }
                                     </IconButton>
-                                    <IconButton edge="end" onClick={() => { props.geom3dView.removeLayer(layer); setLayersComp(!layersComp); }}>
+                                    <IconButton edge="end" onClick={() => { 
+                                        getView().removeLayer(layer); 
+                                        if (layerContext.selectedLayer == layer) clearCurrentInteraction(); 
+                                        setLayersComp(!layersComp); 
+                                    }}>
                                         <DeleteIcon />
                                     </IconButton>
                                 </Stack>
@@ -69,15 +84,14 @@ export default function LayerList(props) {
         }
 
         setLayerMarkup(layerMarkupG);
-    }, [layersComp, selectedGeometryLayer])
+    }, [layersComp, layerContext.selectedLayer])
 
     const handleChange = (e) => {
         setLayerType(e.target.value);
     };
 
     const addLayer = (layer) => {
-        console.log(layer);
-        props.geom3dView.addLayer(layer);
+        getView().addLayer(layer);
         setLayersComp(!layersComp);
     }
 

@@ -1,0 +1,11 @@
+diplomska:
+- bugs:
+	- z indicator ni prou
+	- pointclouds se ne prilagajajo razdalji
+
+	- geometries aren't removed from geometrylayer when layer is removed sometimes
+	- add select interaction for mass deleting
+
+- backend:
+	- hosts files for pointclouds and .gltf models -> convert some ifcs to gltf so you have usable models, add more pointclouds
+	- allows people to edit geometries in realtime via websockets -> UPDATE THIS LATER, should use uuid-d sessions, create a list of "projects" each project is also a session or smth
