@@ -9,10 +9,18 @@ let pointclouds = [
     { name: 'Grassfields', dir: 'fields/cloud.js' }
 ];
 
+let ifcs = [
+    { name: 'Building', dir: 'test/test.ifc'}
+]
+
 app.use(express.static('static'));
 
 app.get('/pointclouds', (req, res) => {
     res.json(pointclouds);
+})
+
+app.get('/ifcs', (req, res) => {
+    res.json(ifcs);
 })
 
 app.listen(port, () => { console.log(`Listening on port: ${port}`) })

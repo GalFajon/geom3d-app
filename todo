@@ -1,11 +1,11 @@
 diplomska:
 - bugs:
-	- z indicator ni prou
-	- pointclouds se ne prilagajajo razdalji
+	- add snap to ifc, check how cursor interacts when drawing on IFC model
 
-	- geometries aren't removed from geometrylayer when layer is removed sometimes
-	- add select interaction for mass deleting
+	extra features:
+	- add advanced interface tools for drawing (grids, etc.)
+	- prepare test case data
 
-- backend:
-	- hosts files for pointclouds and .gltf models -> convert some ifcs to gltf so you have usable models, add more pointclouds
-	- allows people to edit geometries in realtime via websockets -> UPDATE THIS LATER, should use uuid-d sessions, create a list of "projects" each project is also a session or smth
+	scene editor:
+	- add option to annotate geometries with properties (adding text properties or JSON objects into geometry properties)
+	- add geojson import that imports geojson properties into a scene

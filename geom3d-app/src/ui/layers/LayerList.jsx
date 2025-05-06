@@ -30,7 +30,7 @@ export default function LayerList(props) {
             let icon = <ShapeLine />;
 
             if (layer.type == "PointcloudLayer") icon = <TerrainIcon />;
-            if (layer.type == "GLTFLayer") icon = <ArchitectureIcon />;
+            if (layer.type == "IFCLayer") icon = <ArchitectureIcon />;
 
             layerMarkupG.push(
                 <ListItemButton
@@ -106,6 +106,7 @@ export default function LayerList(props) {
                     >
                         <MenuItem value='GeometryLayer'><Badge><ShapeLine /></Badge> Geometry layer</MenuItem>
                         <MenuItem value='PointcloudLayer'><Badge><TerrainIcon /></Badge> Pointcloud layer</MenuItem>
+                        <MenuItem value='IFCLayer'><Badge><ArchitectureIcon /></Badge> IFC layer</MenuItem>
                     </Select>
                 </Grid>
                 <Grid size={4}>

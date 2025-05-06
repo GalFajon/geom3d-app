@@ -1,8 +1,9 @@
 import { Modal, Box, Button, Typography, IconButton, TextField, Fade, Stack, Select, MenuItem } from '@mui/material'
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
-import { getPointclouds } from '../../api/apiWrapper';
-import { GeometryLayer, PointcloudLayer } from '../../geom3d/geom3d.es';
+import { getIFCs, getPointclouds } from '../../api/apiWrapper';
+import { GeometryLayer, PointcloudLayer } from '../../geom3d/geom3d.es.js';
+import { IFCLayer } from '../../geom3d/geom3d.es.js';
 
 const style = {
     position: 'absolute',
@@ -19,13 +20,18 @@ const style = {
 export default function LayerAddModal(props) {
     const [open, setOpen] = useState(false);
     const [pointclouds, setPointclouds] = useState([]);
+    const [ifcs, setIFCs] = useState([]);
     const [tag, setTag] = useState('');
     const [selectedPointcloud, setSelectedPointcloud] = useState('fields/cloud.js');
+    const [selectedIFC, setSelectedIFC] = useState('test/test.ifc');
 
     useEffect(() => {
         async function init() {
             let ptclds = await getPointclouds();
             setPointclouds(ptclds);
+
+            let ifcs = await getIFCs();
+            setIFCs(ifcs);
         }
 
         init();
@@ -35,15 +41,16 @@ export default function LayerAddModal(props) {
         setSelectedPointcloud(e.target.value);
     };
 
+    const handleChangeIFC = (e) => {
+        setSelectedIFC(e.target.value);
+    };
+
     const handleClick = (e) => {
         let l = null;
 
-        if (props.layerType == 'GeometryLayer') {
-            l = new GeometryLayer({ geometries: [], name: tag })
-        }
-        else if (props.layerType == 'PointcloudLayer') {
-            l = new PointcloudLayer({ urls: [`/pointclouds/${selectedPointcloud}`], name: tag })
-        }
+        if (props.layerType == 'GeometryLayer') l = new GeometryLayer({ geometries: [], name: tag })
+        else if (props.layerType == 'PointcloudLayer') l = new PointcloudLayer({ urls: [`/pointclouds/${selectedPointcloud}`], name: tag })
+        else if (props.layerType == 'IFCLayer') l = new IFCLayer({ urls: [`/ifcs/${selectedIFC}`], name: tag })
 
         props.addLayer(l);
 
@@ -51,9 +58,11 @@ export default function LayerAddModal(props) {
     }
 
     let ptcldOptions = [];
+    let ifcOptions = [];
 
     for (let pointcloud of pointclouds) ptcldOptions.push(<MenuItem value={pointcloud.dir}>{pointcloud.name}</MenuItem>)
-
+    for (let ifc of ifcs) ifcOptions.push(<MenuItem value={ifc.dir}>{ifc.name}</MenuItem>)
+    
     return (
         <>
             <IconButton onClick={() => { setOpen(true) }}>
@@ -86,6 +95,17 @@ export default function LayerAddModal(props) {
                                         onChange={handleChange}
                                     >
                                         {ptcldOptions}
+                                    </Select>
+                                    : <></>
+                            }
+                            {
+                                props.layerType == 'IFCLayer' && ifcs.length > 0 ?
+                                    <Select
+                                        fullWidth={true}
+                                        value={selectedIFC}
+                                        onChange={handleChangeIFC}
+                                    >
+                                        {ifcOptions}
                                     </Select>
                                     : <></>
                             }
