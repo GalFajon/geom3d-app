@@ -1,0 +1,3 @@
+[submodule "geom3d"]
+	path = geom3d
+	url = https://github.com/GalFajon/geom3d.git
