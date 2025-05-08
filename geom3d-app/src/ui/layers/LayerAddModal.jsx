@@ -19,11 +19,15 @@ const style = {
 
 export default function LayerAddModal(props) {
     const [open, setOpen] = useState(false);
+    const [tag, setTag] = useState('');
+
     const [pointclouds, setPointclouds] = useState([]);
     const [ifcs, setIFCs] = useState([]);
-    const [tag, setTag] = useState('');
     const [selectedPointcloud, setSelectedPointcloud] = useState('fields/cloud.js');
     const [selectedIFC, setSelectedIFC] = useState('test/test.ifc');
+
+    const [customIfcUrl, setCustomIfcUrl] = useState('');
+    const [customPtcldUrl, setCustomPtcldUrl] = useState('');
 
     useEffect(() => {
         async function init() {
@@ -49,8 +53,8 @@ export default function LayerAddModal(props) {
         let l = null;
 
         if (props.layerType == 'GeometryLayer') l = new GeometryLayer({ geometries: [], name: tag })
-        else if (props.layerType == 'PointcloudLayer') l = new PointcloudLayer({ urls: [`/pointclouds/${selectedPointcloud}`], name: tag })
-        else if (props.layerType == 'IFCLayer') l = new IFCLayer({ urls: [`/ifcs/${selectedIFC}`], name: tag })
+        else if (props.layerType == 'PointcloudLayer') l = new PointcloudLayer({ urls: [ customPtcldUrl == '' ? `/pointclouds/${selectedPointcloud}` : customPtcldUrl], name: tag })
+        else if (props.layerType == 'IFCLayer') l = new IFCLayer({ urls: [customIfcUrl == '' ? `/ifcs/${selectedIFC}` : customIfcUrl], name: tag })
 
         props.addLayer(l);
 
@@ -88,25 +92,54 @@ export default function LayerAddModal(props) {
                                 }}
                             />
                             {
-                                props.layerType == 'PointcloudLayer' && pointclouds.length > 0 ?
-                                    <Select
-                                        fullWidth={true}
-                                        value={selectedPointcloud}
-                                        onChange={handleChange}
-                                    >
-                                        {ptcldOptions}
-                                    </Select>
+                                props.layerType == 'PointcloudLayer' ?
+                                    <>
+                                    {
+                                        pointclouds.length > 0 ?
+                                        <Select
+                                            fullWidth={true}
+                                            value={selectedPointcloud}
+                                            onChange={handleChange}
+                                        >
+                                            {ptcldOptions}
+                                        </Select> : <></>
+                                    }
+                                        <TextField
+                                            id="ptcldUrl"
+                                            fullWidth={true}
+                                            label="Pointcloud URL"
+                                            variant="outlined"
+                                            value={customPtcldUrl}
+                                            onChange={(e) => {
+                                                setCustomPtcldUrl(e.target.value);
+                                            }}
+                                        />
+                                    </>
                                     : <></>
                             }
                             {
-                                props.layerType == 'IFCLayer' && ifcs.length > 0 ?
-                                    <Select
+                                props.layerType == 'IFCLayer' ?
+                                    <>
+                                    {ifcs.length > 0 ?
+                                        <Select
+                                            fullWidth={true}
+                                            value={selectedIFC}
+                                            onChange={handleChangeIFC}
+                                        >
+                                            {ifcOptions}
+                                        </Select> : <></>
+                                    }
+                                    <TextField
+                                        id="ifcUrl"
                                         fullWidth={true}
-                                        value={selectedIFC}
-                                        onChange={handleChangeIFC}
-                                    >
-                                        {ifcOptions}
-                                    </Select>
+                                        label="IFC URL"
+                                        variant="outlined"
+                                        value={customIfcUrl}
+                                        onChange={(e) => {
+                                            setCustomIfcUrl(e.target.value);
+                                        }}
+                                    />
+                                    </>
                                     : <></>
                             }
                             <Button onClick={handleClick} variant="outlined">Add</Button>

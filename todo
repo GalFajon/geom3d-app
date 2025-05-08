@@ -1,6 +1,19 @@
 diplomska:
 - bugs:
+	- koordinatni sistem ifcjev ni pravilen
+
+	- height kurzorja se ne posodablja na oblaku točk
+	- kurzor še zmeraj registrira izbrisan pointcloud
+	
 	- add snap to ifc, check how cursor interacts when drawing on IFC model
+	
+	- omogočaj izvoz geometry layerja v geojson
+	- omogoči uvoz geojsona
+	
+	- dodaj možnost da se izklopi geometry depth testing na nivoju posameznega sloja
+	
+	- omogoči izvoz projekta
+	- zawrappaj vse skupaj v docker
 
 	extra features:
 	- add advanced interface tools for drawing (grids, etc.)

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import LayerList from "./layers/LayerList";
-import { AppBar, Toolbar, Button, Grid, IconButton, Box, Stack, Menu, MenuItem, ListItemIcon } from '@mui/material';
+import { AppBar, Toolbar, Button, Grid, IconButton, Box, Stack, Menu, MenuItem, ListItemIcon, Typography, Tooltip } from '@mui/material';
 import ModeIcon from '@mui/icons-material/Mode';
 import CenterFocusStrongIcon from '@mui/icons-material/CenterFocusStrong';
 import DesignServicesIcon from '@mui/icons-material/DesignServices';
@@ -43,17 +43,24 @@ export default function Nav(props) {
     return (
         <AppBar sx={{ zIndex: 2147483647 }} position="static">
             <Toolbar>
+                <Typography variant="h5">Geom3D</Typography>
                 <Box display='flex' flexGrow={1}></Box>
                 <Stack spacing={2} direction="row">
-                    <IconButton onClick={() => { if (getView()) getView().center() }} color="inherit">
-                        <CenterFocusStrongIcon />
-                    </IconButton>
-                    <IconButton 
-                        color="inherit"
-                        onClick={() => { addModify() }}
-                    >
-                        <DesignServicesIcon />
-                    </IconButton>
+                    <Tooltip title="Center view">
+                        <IconButton onClick={() => { if (getView()) getView().center() }} color="inherit">
+                            <CenterFocusStrongIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Modify geometry on selected layer">
+                        <IconButton 
+                            color="inherit"
+                            disabled={!layerContext.selectedLayer}
+                            onClick={() => { addModify() }}
+                        >
+                            <DesignServicesIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Draw geometry on selected layer">
                     <IconButton 
                         color="inherit"
                         id="draw-dropdown-button"
@@ -65,6 +72,7 @@ export default function Nav(props) {
                     >
                         <ModeIcon />
                     </IconButton>
+                    </Tooltip>
                     <Menu
                         id="draw-dropdown-menu"
                         anchorEl={anchorEl}
