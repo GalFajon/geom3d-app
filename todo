@@ -1,24 +1,18 @@
 diplomska:
 - bugs:
-	- koordinatni sistem ifcjev ni pravilen
+	- ifc model gets weirdly clipped when zooming in and out
 
-	- height kurzorja se ne posodablja na oblaku točk
-	- kurzor še zmeraj registrira izbrisan pointcloud
-	
+- features:
+	- select to delete
 	- add snap to ifc, check how cursor interacts when drawing on IFC model
-	
+	- dodaj možnost da se izklopi geometry depth testing na nivoju posameznega sloja
+
 	- omogočaj izvoz geometry layerja v geojson
 	- omogoči uvoz geojsona
-	
-	- dodaj možnost da se izklopi geometry depth testing na nivoju posameznega sloja
-	
-	- omogoči izvoz projekta
 	- zawrappaj vse skupaj v docker
+	- v UI dodaj prikaz geometry propertyev ter možnost dodajanja propertyev v geometrijo	
 
 	extra features:
 	- add advanced interface tools for drawing (grids, etc.)
-	- prepare test case data
-
-	scene editor:
-	- add option to annotate geometries with properties (adding text properties or JSON objects into geometry properties)
-	- add geojson import that imports geojson properties into a scene
+	- prepare test case data -> najbrž bo most
+	- omogoči izvoz projekta

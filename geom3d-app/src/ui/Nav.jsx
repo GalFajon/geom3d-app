@@ -11,6 +11,7 @@ import { SelectedLayerContext } from "../ContextWrapper";
 import PentagonIcon from '@mui/icons-material/Pentagon';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import LocationPinIcon from '@mui/icons-material/LocationPin';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 export default function Nav(props) {
     const layerContext = useContext(SelectedLayerContext);
@@ -23,6 +24,14 @@ export default function Nav(props) {
     const handleClose = () => {
       setAnchorEl(null);
     };
+
+    function addDelete() {
+        clearCurrentInteraction();
+
+        if (layerContext.selectedLayer) { 
+            setCurrentInteraction(layerContext.selectedLayer,'Delete');
+        }
+    }
 
     function addModify() {
         clearCurrentInteraction();
@@ -47,31 +56,48 @@ export default function Nav(props) {
                 <Box display='flex' flexGrow={1}></Box>
                 <Stack spacing={2} direction="row">
                     <Tooltip title="Center view">
-                        <IconButton onClick={() => { if (getView()) getView().center() }} color="inherit">
-                            <CenterFocusStrongIcon />
-                        </IconButton>
+                        <span>
+                            <IconButton onClick={() => { if (getView()) getView().center() }} color="inherit">
+                                <CenterFocusStrongIcon />
+                            </IconButton>
+                        </span>
                     </Tooltip>
-                    <Tooltip title="Modify geometry on selected layer">
-                        <IconButton 
-                            color="inherit"
-                            disabled={!layerContext.selectedLayer}
-                            onClick={() => { addModify() }}
-                        >
-                            <DesignServicesIcon />
-                        </IconButton>
+                    <Tooltip title={layerContext.selectedLayer ? "Delete geometry" : "Create and select a geometry layer to use this tool."}>
+                        <span>
+                            <IconButton 
+                                color="inherit"
+                                disabled={!layerContext.selectedLayer}
+                                onClick={() => { addDelete() }}
+                            >
+                                <DeleteIcon/>
+                            </IconButton>
+                        </span>
                     </Tooltip>
-                    <Tooltip title="Draw geometry on selected layer">
-                    <IconButton 
-                        color="inherit"
-                        id="draw-dropdown-button"
-                        aria-controls={open ? 'basic-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        onClick={handleClick}
-                        disabled={!layerContext.selectedLayer}
-                    >
-                        <ModeIcon />
-                    </IconButton>
+                    <Tooltip title={layerContext.selectedLayer ? "Modify geometry on selected layer" : "Create and select a geometry layer to use this tool."}>
+                        <span>
+                            <IconButton 
+                                color="inherit"
+                                disabled={!layerContext.selectedLayer}
+                                onClick={() => { addModify() }}
+                            >
+                                <DesignServicesIcon />
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                    <Tooltip title={layerContext.selectedLayer ? "Draw geometry on selected layer" : "Create and select a geometry layer to use this tool."}>
+                        <span>
+                            <IconButton 
+                                color="inherit"
+                                id="draw-dropdown-button"
+                                aria-controls={open ? 'basic-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                onClick={handleClick}
+                                disabled={!layerContext.selectedLayer}
+                            >
+                                <ModeIcon />
+                            </IconButton>
+                        </span>
                     </Tooltip>
                     <Menu
                         id="draw-dropdown-menu"

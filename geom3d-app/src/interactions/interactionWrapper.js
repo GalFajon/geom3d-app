@@ -1,4 +1,4 @@
-import { Snap, Draw, Modify } from '../geom3d/geom3d.es.js';
+import { Snap, Draw, Modify, Select } from '../geom3d/geom3d.es.js';
 import { getView } from '../geom3d/geom3dWrapper.js';
 
 let currentInteraction = null;
@@ -59,6 +59,18 @@ export function setCurrentInteraction(layer, type, geomType) {
 
         if (getView()) {
             getView().addInteraction(currentInteraction);
+        }
+    }
+    else if (layer.type == 'GeometryLayer' && type == 'Delete') {
+        currentInteraction = new Select({
+            layer: layer,
+        });
+
+        if (getView()) {
+            getView().addInteraction(currentInteraction);
+            currentInteraction.addEventListener('selected', (e) => {
+                layer.remove(e.detail.geometry);
+            })
         }
     }
 }
