@@ -8,11 +8,14 @@ import { AppBar, Toolbar, Button, Grid } from '@mui/material';
 import Nav from './ui/Nav.jsx';
 import { getView, initializeGeom3D } from './geom3d/geom3dWrapper.js';
 import { SelectedLayerContext } from './ContextWrapper.js';
+import GeometryPropertyDrawer from './ui/GeometryPropertyDrawer.jsx';
 
 function App() {
   const [selectedLayer, setSelectedLayer] = useState(null);
   const [scriptsLoaded, setScriptsLoaded] = useState(false);
   const [geom3dView, setGeom3dView] = useState(null);
+  const [geomProperties, setGeomProperties] = useState({});
+  const [geomPropertiesOpen, setGeomPropertiesOpen] = useState(false);
 
   useScripts([
     "./dependencies/potree/build/libs/jquery/jquery-3.1.1.min.js",
@@ -38,6 +41,19 @@ function App() {
     if (scriptsLoaded) main();
   }, [scriptsLoaded])
 
+  const onAdd = (key,value) => {
+    console.log(key,value);
+    let o = JSON.parse(JSON.stringify(geomProperties));
+    o[key] = value;
+    setGeomProperties(o);
+  }
+
+  const onRemove = (key) => {
+    let o = JSON.parse(JSON.stringify(geomProperties));
+    delete o[key];
+    setGeomProperties(o);
+  }
+
   return (
     <>
       <SelectedLayerContext.Provider value={{ selectedLayer: selectedLayer, setSelectedLayer: setSelectedLayer }}>
@@ -47,6 +63,7 @@ function App() {
             <>
               <Nav/>
               <Sidebar sx={{ zIndex: 2147483647 }}/>
+              <GeometryPropertyDrawer open={geomPropertiesOpen} value={geomProperties} onAdd={onAdd} onRemove={onRemove}/>
             </>
             : <></>
         }

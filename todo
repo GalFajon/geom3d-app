@@ -1,18 +1,15 @@
 diplomska:
 - bugs:
 	- ifc model gets weirdly clipped when zooming in and out
-
+	
 - features:
-	- select to delete
-	- add snap to ifc, check how cursor interacts when drawing on IFC model
-	- dodaj možnost da se izklopi geometry depth testing na nivoju posameznega sloja
-
-	- omogočaj izvoz geometry layerja v geojson
-	- omogoči uvoz geojsona
-	- zawrappaj vse skupaj v docker
 	- v UI dodaj prikaz geometry propertyev ter možnost dodajanja propertyev v geometrijo	
+	- dodaj export geojson gumb na geometrylayer
+	l670pohn {°oi }
+	- dodaj možnost da se izklopi geometry depth testing na nivoju posameznega sloja
+	- add snap to ifc, check how cursor interacts when drawing on IFC model
+	- zawrappaj vse skupaj v docker
 
 	extra features:
 	- add advanced interface tools for drawing (grids, etc.)
 	- prepare test case data -> najbrž bo most
-	- omogoči izvoz projekta
