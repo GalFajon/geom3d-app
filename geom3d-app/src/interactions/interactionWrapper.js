@@ -38,7 +38,16 @@ export function clearCurrentInteraction() {
 export function setCurrentInteraction(layer, type, geomType) {
     if (currentInteraction && getView()) getView().removeInteraction(currentInteraction);
 
-    if (layer.type == 'GeometryLayer' && type == 'Draw') {
+    if (layer.type == 'GeometryLayer' && type == 'Select') {
+        currentInteraction = new Select({
+            layer: layer,
+        });
+
+        if (getView()) {
+            getView().addInteraction(currentInteraction);
+        }
+    }
+    else if (layer.type == 'GeometryLayer' && type == 'Draw') {
         currentInteraction = new Draw({
             layer: layer,
             type: geomType
@@ -73,6 +82,8 @@ export function setCurrentInteraction(layer, type, geomType) {
             })
         }
     }
+
+    return currentInteraction;
 }
 
 window.addEventListener('keydown', (e) => {

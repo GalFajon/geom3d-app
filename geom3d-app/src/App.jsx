@@ -7,15 +7,14 @@ import Sidebar from './ui/Sidebar.jsx';
 import { AppBar, Toolbar, Button, Grid } from '@mui/material';
 import Nav from './ui/Nav.jsx';
 import { getView, initializeGeom3D } from './geom3d/geom3dWrapper.js';
-import { SelectedLayerContext } from './ContextWrapper.js';
+import { SelectedGeometryContext, SelectedLayerContext } from './ContextWrapper.js';
 import GeometryPropertyDrawer from './ui/GeometryPropertyDrawer.jsx';
 
 function App() {
   const [selectedLayer, setSelectedLayer] = useState(null);
+  const [selectedGeometry, setSelectedGeometry] = useState(null);
   const [scriptsLoaded, setScriptsLoaded] = useState(false);
   const [geom3dView, setGeom3dView] = useState(null);
-  const [geomProperties, setGeomProperties] = useState({});
-  const [geomPropertiesOpen, setGeomPropertiesOpen] = useState(false);
 
   useScripts([
     "./dependencies/potree/build/libs/jquery/jquery-3.1.1.min.js",
@@ -41,21 +40,9 @@ function App() {
     if (scriptsLoaded) main();
   }, [scriptsLoaded])
 
-  const onAdd = (key,value) => {
-    console.log(key,value);
-    let o = JSON.parse(JSON.stringify(geomProperties));
-    o[key] = value;
-    setGeomProperties(o);
-  }
-
-  const onRemove = (key) => {
-    let o = JSON.parse(JSON.stringify(geomProperties));
-    delete o[key];
-    setGeomProperties(o);
-  }
-
   return (
     <>
+      <SelectedGeometryContext.Provider value={{ selectedGeometry: selectedGeometry, setSelectedGeometry: setSelectedGeometry }}>
       <SelectedLayerContext.Provider value={{ selectedLayer: selectedLayer, setSelectedLayer: setSelectedLayer }}>
       <Grid container>
         { 
@@ -63,7 +50,6 @@ function App() {
             <>
               <Nav/>
               <Sidebar sx={{ zIndex: 2147483647 }}/>
-              <GeometryPropertyDrawer open={geomPropertiesOpen} value={geomProperties} onAdd={onAdd} onRemove={onRemove}/>
             </>
             : <></>
         }
@@ -73,6 +59,7 @@ function App() {
         </div>
       </Grid>
       </SelectedLayerContext.Provider>
+      </SelectedGeometryContext.Provider>
     </>
   )
 }

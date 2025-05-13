@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import LayerList from "./layers/LayerList";
 import { AppBar, Toolbar, Button, Grid, IconButton, Box, Stack, Menu, MenuItem, ListItemIcon, Typography, Tooltip } from '@mui/material';
 import ModeIcon from '@mui/icons-material/Mode';
@@ -7,20 +7,26 @@ import DesignServicesIcon from '@mui/icons-material/DesignServices';
 import { getView } from "../geom3d/geom3dWrapper";
 import { clearCurrentInteraction, setCurrentInteraction } from "../interactions/interactionWrapper";
 import { SelectedLayerContext } from "../ContextWrapper";
-
+import { SelectedGeometryContext } from "../ContextWrapper";
+import GeometryPropertyDrawer from "../ui/GeometryPropertyDrawer.jsx";
 import PentagonIcon from '@mui/icons-material/Pentagon';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import LocationPinIcon from '@mui/icons-material/LocationPin';
 import DeleteIcon from '@mui/icons-material/Delete';
+import InfoIcon from '@mui/icons-material/Info';
 
 export default function Nav(props) {
     const layerContext = useContext(SelectedLayerContext);
+    const selectedGeometryContext = useContext(SelectedGeometryContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
-
+    const [geomProperties, setGeomProperties] = useState({});
+    const [geomPropertiesOpen, setGeomPropertiesOpen] = useState(false);
+  
     const handleClick = (e) => {
       if (layerContext.selectedLayer) setAnchorEl(e.currentTarget);
     };
+    
     const handleClose = () => {
       setAnchorEl(null);
     };
@@ -49,7 +55,46 @@ export default function Nav(props) {
         }
     }
 
+    window.addEventListener('keydown', (e) => {
+        if (e.key == 'Escape' && geomPropertiesOpen) setGeomPropertiesOpen(false); 
+    })
+
+    //useEffect(() => {
+    //    selectedGeometryContext.selectedGeometry.properties = geomProperties;
+    //}, [geomProperties])
+
+    function addSelect() {
+        clearCurrentInteraction();
+
+        if (layerContext.selectedLayer) { 
+            let select = setCurrentInteraction(layerContext.selectedLayer,'Select');
+
+            select.addEventListener('selected', (e) => {
+                selectedGeometryContext.setSelectedGeometry(e.detail.geometry);
+                setGeomProperties(e.detail.geometry.properties);
+                setGeomPropertiesOpen(true);
+            });
+        }
+    }
+
+    const onAdd = (key,value) => {
+        let o = JSON.parse(JSON.stringify(geomProperties));
+        o[key] = value;
+        setGeomProperties(o);
+
+        selectedGeometryContext.selectedGeometry.properties = o;
+    }
+    
+    const onRemove = (key) => {
+        let o = JSON.parse(JSON.stringify(geomProperties));
+        delete o[key];
+        setGeomProperties(o);
+
+        selectedGeometryContext.selectedGeometry.properties = o;
+    }
+
     return (
+        <>
         <AppBar sx={{ zIndex: 2147483647 }} position="static">
             <Toolbar>
                 <Typography variant="h5">Geom3D</Typography>
@@ -99,6 +144,21 @@ export default function Nav(props) {
                             </IconButton>
                         </span>
                     </Tooltip>
+                    <Tooltip title={layerContext.selectedLayer ? "View geometry attributes" : "Create and select a geometry layer to use this tool."}>
+                        <span>
+                            <IconButton 
+                                color="inherit"
+                                id="draw-dropdown-button"
+                                aria-controls={open ? 'basic-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                onClick={() => { addSelect() }}
+                                disabled={!layerContext.selectedLayer}
+                            >
+                                <InfoIcon />
+                            </IconButton>
+                        </span>
+                    </Tooltip>
                     <Menu
                         id="draw-dropdown-menu"
                         anchorEl={anchorEl}
@@ -131,5 +191,7 @@ export default function Nav(props) {
                 </Stack>
             </Toolbar>
         </AppBar>
+        <GeometryPropertyDrawer open={geomPropertiesOpen} value={geomProperties} onAdd={onAdd} onRemove={onRemove}/>
+        </>
     );
 }
