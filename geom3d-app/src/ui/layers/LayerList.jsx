@@ -7,11 +7,13 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import AdsClickIcon from '@mui/icons-material/AdsClick';
 import ArchitectureIcon from '@mui/icons-material/Architecture';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useContext, useEffect, useState } from 'react';
 import LayerAddModal from './LayerAddModal';
 import { getView } from '../../geom3d/geom3dWrapper';
 import { SelectedLayerContext } from '../../ContextWrapper';
 import { clearCurrentInteraction, isSnapping, toggleSnap } from '../../interactions/interactionWrapper';
+import { GeoJSON } from '../../geom3d/geom3d.es.js';
 
 export default function LayerList(props) {
     const [layerMarkup, setLayerMarkup] = useState([]);
@@ -47,18 +49,26 @@ export default function LayerList(props) {
                     <ListItem
                         secondaryAction={
                             <>
-                                <Stack spacing={2} direction="row">
-                                    <IconButton edge="end" onClick={() => { toggleSnap(layer); setLayersComp(!layersComp); }}>
+                                <Stack spacing={1} direction="row">
+                                    {
+                                        layer.type == 'GeometryLayer' ? 
+                                            <IconButton size="small" edge="end" onClick={() => { GeoJSON.download(GeoJSON.export(layer), layer.name)  }}>
+                                                <FileDownloadIcon></FileDownloadIcon>
+                                            </IconButton>
+                                        : 
+                                            <></>
+                                    }
+                                    <IconButton size="small" edge="end" onClick={() => { toggleSnap(layer); setLayersComp(!layersComp); }}>
                                         {
                                             isSnapping(layer) ? <AdsClickIcon /> : <AdsClickIcon color='disabled' />
                                         }
                                     </IconButton>
-                                    <IconButton edge="end" onClick={() => { if (layer.visible) layer.hide(); else layer.show(); setLayersComp(!layersComp); }}>
+                                    <IconButton size="small" edge="end" onClick={() => { if (layer.visible) layer.hide(); else layer.show(); setLayersComp(!layersComp); }}>
                                         {
                                             layer.visible ? <VisibilityIcon /> : <VisibilityOffIcon />
                                         }
                                     </IconButton>
-                                    <IconButton edge="end" onClick={() => { 
+                                    <IconButton size="small" edge="end" onClick={() => { 
                                         getView().removeLayer(layer); 
                                         if (layerContext.selectedLayer == layer) clearCurrentInteraction(); 
                                         setLayersComp(!layersComp); 
