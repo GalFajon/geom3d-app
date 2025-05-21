@@ -4,6 +4,21 @@ import { useEffect, useState } from 'react';
 import { getIFCs, getPointclouds } from '../../api/apiWrapper';
 import { GeometryLayer, PointcloudLayer } from '../../geom3d/geom3d.es.js';
 import { IFCLayer } from '../../geom3d/geom3d.es.js';
+import { GeoJSON } from '../../geom3d/geom3d.es.js';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
+
+const VisuallyHiddenInput = styled('input')({
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: 1,
+    overflow: 'hidden',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    whiteSpace: 'nowrap',
+    width: 1,
+});
 
 const style = {
     position: 'absolute',
@@ -28,6 +43,7 @@ export default function LayerAddModal(props) {
 
     const [customIfcUrl, setCustomIfcUrl] = useState('');
     const [customPtcldUrl, setCustomPtcldUrl] = useState('');
+    const [geomLayerGeojson, setGeomLayerGeojson] = useState(null);
 
     useEffect(() => {
         async function init() {
@@ -52,7 +68,7 @@ export default function LayerAddModal(props) {
     const handleClick = (e) => {
         let l = null;
 
-        if (props.layerType == 'GeometryLayer') l = new GeometryLayer({ geometries: [], name: tag })
+        if (props.layerType == 'GeometryLayer') l = new GeometryLayer({ geometries: geomLayerGeojson ? GeoJSON.import(geomLayerGeojson) : [], name: tag })
         else if (props.layerType == 'PointcloudLayer') l = new PointcloudLayer({ urls: [ customPtcldUrl == '' ? `/pointclouds/${selectedPointcloud}` : customPtcldUrl], name: tag })
         else if (props.layerType == 'IFCLayer') l = new IFCLayer({ urls: [customIfcUrl == '' ? `/ifcs/${selectedIFC}` : customIfcUrl], name: tag })
 
@@ -91,6 +107,66 @@ export default function LayerAddModal(props) {
                                     setTag(e.target.value);
                                 }}
                             />
+                            {
+                                props.layerType == 'GeometryLayer' ? <>
+                                    <Stack direction={'row'} spacing={2}>
+                                        <Button
+                                            component="label"
+                                            role={undefined}
+                                            variant="contained"
+                                            tabIndex={-1}
+                                            startIcon={<CloudUploadIcon />}
+                                            fullWidth
+                                        >
+                                            Upload GeoJSON
+                                            <VisuallyHiddenInput
+                                                type="file"
+                                                onChange={(event) => {
+                                                    let reader = new FileReader();
+                                                    
+                                                    if (event.target.files.length > 0) {
+                                                        reader.readAsText(event.target.files[0], "UTF-8");
+
+                                                        reader.onload = function (evt) {
+                                                            try {
+                                                                setGeomLayerGeojson(JSON.parse(evt.target.result));
+                                                                event.target.value = null;
+                                                            }
+                                                            catch (err) {
+                                                                console.log(err);
+                                                                throw ("Error reading file.");
+                                                            }
+                                                        }
+                                                        reader.onerror = function (evt) {
+                                                            throw("Error reading file.");
+                                                        }
+                                                    }
+                                                }}
+                                            />
+                                        </Button>
+                                        <Button 
+                                            onClick={() => { setGeomLayerGeojson(null); }}
+                                            variant="contained"
+                                            fullWidth
+                                        >
+                                            Clear
+                                        </Button>
+                                    </Stack>
+                                    {
+                                        geomLayerGeojson ? 
+                                        <TextField
+                                            style={{textAlign: 'left', color: 'black'}}
+                                            multiline
+                                            rows={10}
+                                            value={JSON.stringify(geomLayerGeojson, undefined, 4)}
+                                            disabled={true}
+                                        />
+                                        : <></>
+                                    }
+                                </>
+                                :
+                                <></>
+                            }
                             {
                                 props.layerType == 'PointcloudLayer' ?
                                     <>

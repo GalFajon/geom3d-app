@@ -33,6 +33,7 @@ export default function Nav(props) {
 
     function addDelete() {
         clearCurrentInteraction();
+        setGeomPropertiesOpen(false); 
 
         if (layerContext.selectedLayer) { 
             setCurrentInteraction(layerContext.selectedLayer,'Delete');
@@ -41,6 +42,7 @@ export default function Nav(props) {
 
     function addModify() {
         clearCurrentInteraction();
+        setGeomPropertiesOpen(false); 
 
         if (layerContext.selectedLayer) { 
             setCurrentInteraction(layerContext.selectedLayer,'Modify');
@@ -49,6 +51,7 @@ export default function Nav(props) {
     
     function addDraw(geomType) {
         clearCurrentInteraction();
+        setGeomPropertiesOpen(false); 
 
         if (layerContext.selectedLayer) { 
             setCurrentInteraction(layerContext.selectedLayer,'Draw', geomType);

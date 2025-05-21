@@ -6,7 +6,8 @@ diplomska:
 	- add tooltips to layer list
 	- dodaj možnost da se izklopi geometry depth testing na nivoju posameznega sloja
 	- zawrappaj vse skupaj v docker
-	- dodaj geojson import mogoče
+
+	- carve holes into polygons: add interface tools for this
 
 	extra features:
 	- prepare test case data -> najbrž bo most, naj je test case data viden v dockerju
