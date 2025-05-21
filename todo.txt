@@ -1,13 +1,14 @@
 diplomska:
-- bugs:
-	- ifc model gets weirdly clipped when zooming in and out
-	
 - features:
-	- add tooltips to layer list
-	- dodaj možnost da se izklopi geometry depth testing na nivoju posameznega sloja
-	- zawrappaj vse skupaj v docker
+	- 3d prostorske analize:
+		- difference -> že obstaja z luknjami, le naredi da so luknje na različnih višinah
+		- dissolve -> enako, le da lahko združujemo poligone na različnih višinah da ustvarimo npr hribaste poligone, enako z linijami
 
-	- carve holes into polygons: add interface tools for this
+		- TOLE POGLEJ
+
+	- hold shift to move cursor up and down in space, allow user to enter Z of cursor, give x and y coordinates as well, maybe grid snap movement?
+	- snap na ifc
 
 	extra features:
 	- prepare test case data -> najbrž bo most, naj je test case data viden v dockerju
+	- zawrappaj vse skupaj v docker

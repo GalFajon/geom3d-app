@@ -14,6 +14,8 @@ import TimelineIcon from '@mui/icons-material/Timeline';
 import LocationPinIcon from '@mui/icons-material/LocationPin';
 import DeleteIcon from '@mui/icons-material/Delete';
 import InfoIcon from '@mui/icons-material/Info';
+import ContentCutIcon from '@mui/icons-material/ContentCut';
+import HealingIcon from '@mui/icons-material/Healing';
 
 export default function Nav(props) {
     const layerContext = useContext(SelectedLayerContext);
@@ -37,6 +39,24 @@ export default function Nav(props) {
 
         if (layerContext.selectedLayer) { 
             setCurrentInteraction(layerContext.selectedLayer,'Delete');
+        }
+    }
+
+    function addCarve() {
+        clearCurrentInteraction();
+        setGeomPropertiesOpen(false); 
+
+        if (layerContext.selectedLayer) { 
+            setCurrentInteraction(layerContext.selectedLayer,'Carve');
+        }
+    }
+
+    function addFill() {
+        clearCurrentInteraction();
+        setGeomPropertiesOpen(false); 
+
+        if (layerContext.selectedLayer) { 
+            setCurrentInteraction(layerContext.selectedLayer,'Fill');
         }
     }
 
@@ -107,6 +127,28 @@ export default function Nav(props) {
                         <span>
                             <IconButton onClick={() => { if (getView()) getView().center() }} color="inherit">
                                 <CenterFocusStrongIcon />
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                    <Tooltip title={layerContext.selectedLayer ? "Carve holes into geometry" : "Create and select a geometry layer to use this tool."}>
+                        <span>
+                            <IconButton 
+                                color="inherit"
+                                disabled={!layerContext.selectedLayer}
+                                onClick={() => { addCarve() }}
+                            >
+                                <ContentCutIcon/>
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                    <Tooltip title={layerContext.selectedLayer ? "Fill holes in geometry" : "Create and select a geometry layer to use this tool."}>
+                        <span>
+                            <IconButton 
+                                color="inherit"
+                                disabled={!layerContext.selectedLayer}
+                                onClick={() => { addFill() }}
+                            >
+                                <HealingIcon/>
                             </IconButton>
                         </span>
                     </Tooltip>

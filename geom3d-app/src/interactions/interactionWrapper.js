@@ -38,7 +38,33 @@ export function clearCurrentInteraction() {
 export function setCurrentInteraction(layer, type, geomType) {
     if (currentInteraction && getView()) getView().removeInteraction(currentInteraction);
 
-    if (layer.type == 'GeometryLayer' && type == 'Select') {
+    if (layer.type == 'GeometryLayer' && type == 'Carve') {
+        currentInteraction = new Draw({
+            layer: layer,
+            type: 'Polygon'
+        });
+
+        if (getView()) {
+            getView().addInteraction(currentInteraction);
+            currentInteraction.addEventListener('drawend', (e) => {
+                if (e.detail) for (let geometry of layer.geometries) if (geometry.type == 'Polygon') geometry.carveHole(e.detail);
+            })
+        }
+    }
+    else if (layer.type == 'GeometryLayer' && type == 'Fill') {
+        currentInteraction = new Draw({
+            layer: layer,
+            type: 'Point'
+        });
+
+        if (getView()) {
+            getView().addInteraction(currentInteraction);
+            currentInteraction.addEventListener('drawend', (e) => {
+                if (e.detail) for (let geometry of layer.geometries) if (geometry.type == 'Polygon') for (let point of e.detail) geometry.fillHole(point.vectors);
+            })
+        }
+    }
+    else if (layer.type == 'GeometryLayer' && type == 'Select') {
         currentInteraction = new Select({
             layer: layer,
         });
