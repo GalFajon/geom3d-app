@@ -2,8 +2,8 @@ diplomska:
 - features:
 	LESS ESSENTIAL STUFF:
 	- hold shift to move cursor up and down in space, allow user to enter Z of cursor, give x and y coordinates as well, maybe grid snap movement?
-	- point and polygon outlines
-	- visualize snap points?
+	- point outlines
+	- modifying holes is buggy
 
 	extra features:
 	- prepare test case data -> najbrž bo most, naj je test case data viden v dockerju

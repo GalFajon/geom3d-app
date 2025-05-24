@@ -43,8 +43,10 @@ export default function LayerList(props) {
                         (layerContext.selectedLayer != null && layerContext.selectedLayer == layer)
                     }
                     onClick={() => { 
-                            if (layer.type == 'GeometryLayer') layerContext.setSelectedLayer(layer); 
-
+                            if (layer.type == 'GeometryLayer') {
+                                layerContext.setSelectedLayer(layer); 
+                                setLayersComp(!layersComp);
+                            }
                         }
                     }
                 >
@@ -54,35 +56,41 @@ export default function LayerList(props) {
                                 <Stack spacing={1} direction="row">
                                     {
                                         layer.type == 'GeometryLayer' ? 
-                                            <IconButton size="small" edge="end" onClick={() => { GeoJSON.download(GeoJSON.export(layer), layer.name)  }}>
+                                            <IconButton size="small" edge="end" onClick={(e) => { GeoJSON.download(GeoJSON.export(layer), layer.name); e.stopPropagation();  }}>
                                                 <FileDownloadIcon></FileDownloadIcon>
                                             </IconButton>
                                         : 
                                             <></>
                                     }
-                                    <IconButton size="small" edge="end" onClick={() => { toggleSnap(layer); setLayersComp(!layersComp); }}>
+                                    <IconButton size="small" edge="end" onClick={(e) => { toggleSnap(layer); setLayersComp(!layersComp); e.stopPropagation(); }}>
                                         {
                                             isSnapping(layer) ? <AdsClickIcon /> : <AdsClickIcon color='disabled' />
                                         }
                                     </IconButton>
                                     { 
                                         layer.type == 'GeometryLayer' ?
-                                        <IconButton size="small" edge="end" onClick={() => { if (layer.depthTesting) layer.disableDepthTesting(); else layer.enableDepthTesting(); setLayersComp(!layersComp); }}>
+                                        <IconButton size="small" edge="end" onClick={(e) => { if (layer.depthTesting) layer.disableDepthTesting(); else layer.enableDepthTesting(); setLayersComp(!layersComp); e.stopPropagation(); }}>
                                             {
                                                 layer.depthTesting ? <FlipToFrontIcon /> : <FlipToBackIcon />
                                             }
                                         </IconButton>
                                         : <></>
                                     }
-                                    <IconButton size="small" edge="end" onClick={() => { if (layer.visible) layer.hide(); else layer.show(); setLayersComp(!layersComp); }}>
+                                    <IconButton size="small" edge="end" onClick={(e) => { if (layer.visible) layer.hide(); else layer.show(); setLayersComp(!layersComp); e.stopPropagation(); }}>
                                         {
                                             layer.visible ? <VisibilityIcon /> : <VisibilityOffIcon />
                                         }
                                     </IconButton>
-                                    <IconButton size="small" edge="end" onClick={() => { 
+                                    <IconButton size="small" edge="end" onClick={(e) => { 
                                         getView().removeLayer(layer); 
-                                        if (layerContext.selectedLayer == layer) clearCurrentInteraction(); 
-                                        setLayersComp(!layersComp); 
+                                        
+                                        if (layerContext.selectedLayer == layer) {
+                                            clearCurrentInteraction(); 
+                                            layerContext.setSelectedLayer(null);
+                                        }
+
+                                        setLayersComp(!layersComp);
+                                        e.stopPropagation();
                                     }}>
                                         <DeleteIcon />
                                     </IconButton>
@@ -105,7 +113,7 @@ export default function LayerList(props) {
         }
 
         setLayerMarkup(layerMarkupG);
-    }, [layersComp, layerContext.selectedLayer])
+    }, [layersComp])
 
     const handleChange = (e) => {
         setLayerType(e.target.value);

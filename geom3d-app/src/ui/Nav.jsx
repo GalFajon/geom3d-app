@@ -24,7 +24,7 @@ export default function Nav(props) {
     const open = Boolean(anchorEl);
     const [geomProperties, setGeomProperties] = useState({});
     const [geomPropertiesOpen, setGeomPropertiesOpen] = useState(false);
-  
+
     const handleClick = (e) => {
       if (layerContext.selectedLayer) setAnchorEl(e.currentTarget);
     };
