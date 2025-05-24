@@ -21,7 +21,7 @@ export default function GeometryPropertyDrawer(props) {
         variant='persistent'
         slotProps={{
             paper: {
-                sx: { marginLeft: "400px", width:"calc(100%-400px)", height: '20%' },
+                sx: { marginLeft: "450px", width:"calc(100%-450px)", height: '20%' },
             }
         }}
         >

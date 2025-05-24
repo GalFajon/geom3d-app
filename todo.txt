@@ -1,10 +1,8 @@
 diplomska:
 - features:
 	LESS ESSENTIAL STUFF:
-	- hold shift to move cursor up and down in space, allow user to enter Z of cursor, give x and y coordinates as well, maybe grid snap movement?
-	- point outlines
-	- modifying holes is buggy
+	- hold shift to move cursor up and down in space, allow user to enter Z of cursor, give x and y coordinates as well, maybe grid snap movement?	
+	- zawrappaj vse skupaj v docker
 
 	extra features:
 	- prepare test case data -> najbrž bo most, naj je test case data viden v dockerju
-	- zawrappaj vse skupaj v docker
