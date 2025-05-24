@@ -1,13 +1,9 @@
 diplomska:
 - features:
-	- 3d prostorske analize:
-		- difference -> že obstaja z luknjami, le naredi da so luknje na različnih višinah
-		- dissolve -> enako, le da lahko združujemo poligone na različnih višinah da ustvarimo npr hribaste poligone, enako z linijami
-
-		- TOLE POGLEJ
-
+	LESS ESSENTIAL STUFF:
 	- hold shift to move cursor up and down in space, allow user to enter Z of cursor, give x and y coordinates as well, maybe grid snap movement?
-	- snap na ifc
+	- point and polygon outlines
+	- visualize snap points?
 
 	extra features:
 	- prepare test case data -> najbrž bo most, naj je test case data viden v dockerju

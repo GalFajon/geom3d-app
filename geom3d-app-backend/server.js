@@ -4,6 +4,9 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT;
 const fs = require('fs');
+const cors = require('cors')
+
+app.use(cors())
 
 let pointclouds = [
     { name: 'Grassfields', dir: 'fields/cloud.js' }
