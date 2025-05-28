@@ -6,3 +6,8 @@ diplomska:
 
 	extra features:
 	- prepare test case data -> najbrž bo most, naj je test case data viden v dockerju
+
+	BUGS:
+	- centering camera on empty view is buggy
+	- centering camera after multiple model removals/additions or pointcloud removals/additions is buggy
+	- certain changes in interactions bug out the view
