@@ -1,4 +1,4 @@
-import { initialize, setView, PointcloudLayer, GeometryLayer, Line, Polygon, Point, View, Draw, Snap, Modify, OverlayLayer, Overlay, GLTFLayer } from './geom3d.es.js';
+import { initialize, setView, PointcloudLayer, GeometryLayer, Line, Polygon, Point, View, Draw, Snap, Modify } from './geom3d.es.js';
 
 let view = null;
 

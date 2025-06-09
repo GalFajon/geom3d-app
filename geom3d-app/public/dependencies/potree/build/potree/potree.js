@@ -87855,7 +87855,7 @@ ENDSEC
 			// let scale = this.node.scale.x;
 			let scale = this.viewer.getMoveSpeed();
 			//camera.near = 0.01 / scale;
-			camera.near = 0.1;
+			camera.near = 0.01;
 			camera.far = 1000;
 			// camera.near = reference.near / scale;
 			// camera.far = reference.far / scale;
