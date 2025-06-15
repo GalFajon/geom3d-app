@@ -158,7 +158,7 @@ export default function LayerAddModal(props) {
                                             style={{textAlign: 'left', color: 'black'}}
                                             multiline
                                             rows={10}
-                                            value={JSON.stringify(geomLayerGeojson, undefined, 4)}
+                                            value={`${JSON.stringify(geomLayerGeojson, undefined, 4).substring(0,200)}...`}
                                             disabled={true}
                                         />
                                         : <></>
